@@ -46,6 +46,8 @@ SAIL_DEFAULT_INST += riscv_insts_vext_red.sail
 SAIL_DEFAULT_INST += riscv_insts_vext_vm.sail
 SAIL_DEFAULT_INST += riscv_insts_vext_vset.sail
 
+SAIL_DEFAULT_INST += riscv_insts_vsarext.sail
+
 SAIL_SEQ_INST  = $(SAIL_DEFAULT_INST) riscv_jalr_seq.sail
 SAIL_RMEM_INST = $(SAIL_DEFAULT_INST) riscv_jalr_rmem.sail riscv_insts_rmem.sail
 
@@ -92,6 +94,10 @@ SAIL_ARCH_SRCS += riscv_types_kext.sail    # Shared/common code for the cryptogr
 
 SAIL_STEP_SRCS = riscv_step_common.sail riscv_step_ext.sail riscv_decode_ext.sail riscv_fetch.sail riscv_step.sail
 RVFI_STEP_SRCS = riscv_step_common.sail riscv_step_rvfi.sail riscv_decode_ext.sail riscv_fetch_rvfi.sail riscv_step.sail
+SAIL_RGENIR_INIT_SRCS = riscv_rgenir.sail 
+#SAIL_MM_INIT_SRCS = prelude.sail $(SAIL_XLEN) riscv_types_common.sail riscv_types_ext.sail riscv_types.sail  riscv_insts_begin.sail riscv_vlen.sail  riscv_reg_type_vector.sail  riscv_regs_vector.sail riscv_types_vector.sail  riscv_mlen.sail  riscv_reg_type_matrix.sail  riscv_regs_matrix.sail riscv_types_matrix.sail riscv_insts_mmext.sail 
+SAIL_MM_INIT_SRCS = riscv_mlen.sail  riscv_reg_type_matrix.sail  riscv_regs_matrix.sail riscv_types_matrix.sail riscv_insts_begin.sail riscv_insts_mmext.sail riscv_insts_end.sail
+#SAIL_MM_INIT_SRCS = riscv_mlen.sail riscv_reg_type_matrix.sail   riscv_regs_matrix.sail riscv_types_matrix.sail riscv_insts_mmext.sail 
 
 # Control inclusion of 64-bit only riscv_analysis
 ifeq ($(ARCH),RV32)
@@ -108,6 +114,9 @@ SAIL_SRCS      = $(addprefix model/,$(SAIL_ARCH_SRCS) $(SAIL_SEQ_INST_SRCS)  $(S
 SAIL_RMEM_SRCS = $(addprefix model/,$(SAIL_ARCH_SRCS) $(SAIL_RMEM_INST_SRCS) $(SAIL_OTHER_SRCS))
 SAIL_RVFI_SRCS = $(addprefix model/,$(SAIL_ARCH_RVFI_SRCS) $(SAIL_SEQ_INST_SRCS) $(RVFI_STEP_SRCS))
 SAIL_COQ_SRCS  = $(addprefix model/,$(SAIL_ARCH_SRCS) $(SAIL_SEQ_INST_SRCS) $(SAIL_OTHER_COQ_SRCS))
+SAIL_RGENIR_SRCS = $(addprefix model/,$(SAIL_RGENIR_INIT_SRCS))
+SAIL_MM_SRCS = $(addprefix model/,$(SAIL_ARCH_SRCS) $(SAIL_MM_INIT_SRCS))
+#SAIL_MM_SRCS = $(addprefix model/,$(SAIL_ARCH_SRCS) $(SAIL_SEQ_INST_SRCS) $(SAIL_MM_INIT_SRCS) $(SAIL_OTHER_SRCS))
 
 PLATFORM_OCAML_SRCS = $(addprefix ocaml_emulator/,platform.ml platform_impl.ml softfloat.ml riscv_ocaml_sim.ml)
 
@@ -260,9 +269,23 @@ generated_definitions/c/riscv_model_$(ARCH).c: riscv_vlen $(SAIL_SRCS) model/mai
 	mkdir -p generated_definitions/c
 	$(SAIL) $(SAIL_FLAGS) -O -Oconstant_fold -memo_z3 -c -c_include riscv_prelude.h -c_include riscv_platform.h -c_no_main $(SAIL_SRCS) model/main.sail -o $(basename $@)
 
+
 generated_definitions/c2/riscv_model_$(ARCH).c: $(SAIL_SRCS) model/main.sail Makefile
 	mkdir -p generated_definitions/c2
 	$(SAIL) $(SAIL_FLAGS) -no_warn -memo_z3 -config c_emulator/config.json -c2 $(SAIL_SRCS) -o $(basename $@)
+
+generated_definitions/pytorch/pytorch.td: $(SAIL_RGENIR_SRCS) Makefile
+	rm -rf generated_definitions/pytorch
+	mkdir -p generated_definitions/pytorch
+	$(SAIL) $(SAIL_FLAGS) -pytorch  $(SAIL_RGENIR_SRCS) -o $(basename $@)
+
+generated_definitions/llvm/llvm.td: $(SAIL_MM_SRCS) Makefile
+	mkdir -p generated_definitions/llvm
+	$(SAIL) $(SAIL_FLAGS) -llvm  $(SAIL_MM_SRCS) -o $(basename $@)
+
+generated_definitions/qemu/qemu.td: $(SAIL_MM_SRCS) Makefile
+	mkdir -p generated_definitions/qemu
+	$(SAIL) $(SAIL_FLAGS) -qemu  $(SAIL_MM_SRCS) -o $(basename $@)
 
 $(SOFTFLOAT_LIBS):
 	$(MAKE) SPECIALIZE_TYPE=$(SOFTFLOAT_SPECIALIZE_TYPE) -C $(SOFTFLOAT_LIBDIR)

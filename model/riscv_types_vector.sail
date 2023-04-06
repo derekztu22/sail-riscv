@@ -151,3 +151,25 @@ enum fwffunct6 = {FWF_VADD, FWF_VSUB}
 enum fvfmfunct6 = {VFM_VMFEQ, VFM_VMFLE, VFM_VMFLT, VFM_VMFNE, VFM_VMFGT, VFM_VMFGE}
 
 enum vmlsop = {VLM, VSM}
+
+enum vsawwfunct6 = {VSADD_WW, VSADDU_WW}
+
+enum vsswwfunct6 = {VSSUB_WW, VSSUBU_WW}
+
+enum vsaccfunct6 = {VWSDOTACC_VV, VWSDOTACCU_VV}
+
+enum vsrfunct6 = {VSREDSUM_WW, VSREDSUMU_WW}
+
+enum vsmaccfunct6 = {VWSMACC_VV, VWSMACCU_VV}
+
+enum vsnmaccfunct6 = {VWSNMSAC_VV, VWSNMSACU_VV}
+
+enum vclipwvfunct3 = {VNCLIPS_WV, VNCLIPUS_WV}
+
+enum vclipwxfunct3 = {VNCLIPS_WX, VNCLIPUS_WX}
+
+enum vclipwifunct3 = {VNCLIPS_WI, VNCLIPUS_WI}
+
+enum vclipwfunct5 = {VNCLIPS_W, VNCLIPUS_W}
+
+enum vmvsarfunct5 = {VMV_V_SAR, VMV_SAR_V}

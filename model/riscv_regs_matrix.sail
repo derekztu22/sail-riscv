@@ -129,3 +129,15 @@ function read_mreg(num_elem, mrid) = {
   var result : vector('n, dec, bits('m)) = undefined;
   result 
 }
+
+val get_num_matrix_elem : (int) -> int effect {undef}
+function get_num_matrix_elem(mbits) = {
+  var num_elem : int = 16;
+  num_elem
+}
+
+val get_mtype_bits : unit -> int effect {undef}
+function get_mtype_bits() = {
+  var num_bits : int = 32;
+  num_bits
+}

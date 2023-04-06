@@ -5,13 +5,6 @@ mapping bytes_wordwidth : int <-> word_width = {
   8 <-> DOUBLE
 }
 
-val get_num_melem : (int) -> int effect {undef}
-function get_num_melem(num_elem) = {
-  var num_melem : int = undefined;
-  num_melem = num_elem;
-  num_melem
-}
-
 /* ******************************************************************* */
 union clause ast = MACCO_MM : (regidx, regidx, regidx)
 
@@ -19,12 +12,11 @@ mapping clause encdec = MACCO_MM(ms2, ms1, md)
   <-> 0b000001 @ 0b0 @ ms2 @ ms1 @ 0b001  @ md @ 0b1011111
 
 function clause execute(MACCO_MM(ms2, ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;
@@ -59,12 +51,11 @@ mapping clause encdec = MACCP_MM(ms2, ms1, md)
   <-> 0b000001 @ 0b1 @ ms2 @ ms1 @ 0b001  @ md @ 0b1011111
 
 function clause execute(MACCP_MM(ms2, ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;
@@ -98,12 +89,11 @@ mapping clause encdec = MSACCO_MM(ms2, ms1, md)
   <-> 0b000011 @ 0b0 @ ms2 @ ms1 @ 0b001  @ md @ 0b1011111
 
 function clause execute(MSACCO_MM(ms2, ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;
@@ -139,12 +129,11 @@ mapping clause encdec = MSACCP_MM(ms2, ms1, md)
   <-> 0b000011 @ 0b1 @ ms2 @ ms1 @ 0b001  @ md @ 0b1011111
 
 function clause execute(MSACCP_MM(ms2, ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;
@@ -185,7 +174,7 @@ function clause execute(FMACC64O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
   let ms2_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms2); 
@@ -258,7 +247,7 @@ function clause execute(FMACC32O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
@@ -332,7 +321,7 @@ function clause execute(FMACC16O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
@@ -408,7 +397,7 @@ function clause execute(FSMACC64O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
@@ -482,7 +471,7 @@ function clause execute(FSMACC32O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
@@ -556,7 +545,7 @@ function clause execute(FSMACC16O_MM(ms2, ms1, md)) = {
   let 'm = mbits;
   let 'o = num_elem * num_elem;
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
 
   let ms1_val : vector('n, dec, bits('m)) = read_mreg(num_elem,  ms1);
@@ -817,12 +806,11 @@ mapping clause encdec = MVH_MM(ms1, md)
   <-> 0b000111 @ 0b0 @ 0b00010 @ ms1 @ 0b011  @ md @ 0b1011111
 
 function clause execute(MVH_MM(ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;
@@ -849,12 +837,11 @@ mapping clause encdec = MVV_MM(ms1, md)
   <-> 0b000111 @ 0b0 @ 0b00011 @ ms1 @ 0b011  @ md @ 0b1011111
 
 function clause execute(MVV_MM(ms1, md)) = {
-  let mbits  : int  = get_vtype_vsew();
-  let lmul       : real = get_vtype_LMUL();
-  let num_elem   : int  = get_num_elem(lmul, mbits);
+  let mbits  : int  = get_mtype_bits();
+  let num_elem   : int  = 16;
 
   assert(8 <= mbits & mbits <= 64);
-  assert(0 <= num_elem & num_elem <= sizeof(vlen));
+  assert(0 <= num_elem & num_elem <= 64);
 
   let 'n = num_elem;
   let 'm = mbits;

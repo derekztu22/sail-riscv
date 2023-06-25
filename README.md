@@ -56,6 +56,14 @@ The following list describes how each generated file is added to QEMU7.2.0:
 - **matrix_helper.c**: Add the file to the _riscv_ folder. Additionally, in _meson.build_, add _'matrix.helper.c'_ to line 18.
 - **trans_rvmm.c.inc**: Add the file to the _riscv/insn\_trans_ folder. Additionally, in _translate.c_ add _#include "insn\_trans/trans\_rvmm.c.inc"_ to line 1037.
 
+Additionally, for the matrix extension, new registers are added so in the _cpu.h_ file we add:
+
+```
+uint32_t mregxy[64] QEMU_ALIGNED(16);
+uint32_t mregz[32*32] QEMU_ALIGNED(16);
+```
+to the CPUArchState struct (lines 150 and 151).
+
 Once the generated code is added QEMU can be built. Here are some sample commands:
 
 ```

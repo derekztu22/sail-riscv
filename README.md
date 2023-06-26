@@ -6,6 +6,8 @@ This repository contains an extension of the RISC-V Sail Model <https://github.c
 Getting started
 ---------------
 
+Please make sure you are using the rgen branch for this tutorial.
+
 ### Building the model
 <p>This tutorial will be based on the matrix extesnion (MM) that RGen uses.</p>
 
@@ -48,7 +50,7 @@ $ cmake --build .
 $ make ARCH=RV64 generated_definitions/qemu/qemu.td
 ```
 
-This work uses [QEMU7.2.0](https://www.qemu.org/download/), and all the built files will be put into the _riscv_ folder.
+This work uses [QEMU7.2.0](https://github.com/qemu/qemu/tree/stable-7.2), and all the built files will be put into the _riscv_ folder.
 
 The following list describes how each generated file is added to QEMU7.2.0:
 - **helper.h**: Add the generated code to line 233 in _helper.h_ in the _riscv_ folder.
@@ -77,9 +79,10 @@ Once the generated code is added QEMU can be built. Here are some sample command
 $ cd $QEMU_ORIGIN
 $ mkdir build
 $ cd build
-$  ../configure --enable-slirp --target-list=riscv64-linux-user,riscv64-softmmu
+$  ../configure --enable-slirp --disable-werror --target-list=riscv64-linux-user,riscv64-softmmu
 $ make
 ```
+If there are issues with the --enable-slirp configuration, please make sure libslirp is installed.
 
 #### PyTorch Generation
 

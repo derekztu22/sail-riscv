@@ -64,6 +64,13 @@ uint32_t mregz[32*32] QEMU_ALIGNED(16);
 ```
 to the CPUArchState struct (lines 150 and 151).
 
+and
+
+```
+char *dyn_mreg_xml;
+```
+to the same file in the ArchCPU struct (line 504).
+
 Once the generated code is added QEMU can be built. Here are some sample commands:
 
 ```

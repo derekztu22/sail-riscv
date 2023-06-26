@@ -281,11 +281,11 @@ generated_definitions/pytorch/pytorch.td: $(SAIL_RGENIR_SRCS) Makefile
 
 generated_definitions/llvm/llvm.td: $(SAIL_MM_SRCS) Makefile
 	mkdir -p generated_definitions/llvm
-	$(SAIL) $(SAIL_FLAGS) -llvm  $(SAIL_MM_SRCS) -o $(basename $@)
+	$(SAIL) $(SAIL_FLAGS) -llvm  -ext MM $(SAIL_MM_SRCS) -o $(basename $@)
 
 generated_definitions/qemu/qemu.td: $(SAIL_MM_SRCS) Makefile
 	mkdir -p generated_definitions/qemu
-	$(SAIL) $(SAIL_FLAGS) -qemu  $(SAIL_MM_SRCS) -o $(basename $@)
+	$(SAIL) $(SAIL_FLAGS) -qemu -ext MM $(SAIL_MM_SRCS) -o $(basename $@)
 
 $(SOFTFLOAT_LIBS):
 	$(MAKE) SPECIALIZE_TYPE=$(SOFTFLOAT_SPECIALIZE_TYPE) -C $(SOFTFLOAT_LIBDIR)

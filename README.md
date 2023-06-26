@@ -6,7 +6,7 @@ This repository contains an extension of the RISC-V Sail Model <https://github.c
 Getting started
 ---------------
 
-Please make sure you are using the rgen branch for this tutorial.
+Please make sure you are using the rgen branch for this tutorial and that you have already installed the extended [Sail repository](https://github.com/derekztu22/sail/tree/rgen).
 
 ### Building the model
 <p>This tutorial will be based on the matrix extesnion (MM) that RGen uses.</p>

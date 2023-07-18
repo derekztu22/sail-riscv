@@ -277,7 +277,7 @@ generated_definitions/c2/riscv_model_$(ARCH).c: $(SAIL_SRCS) model/main.sail Mak
 generated_definitions/pytorch/pytorch.td: $(SAIL_RGENIR_SRCS) Makefile
 	rm -rf generated_definitions/pytorch
 	mkdir -p generated_definitions/pytorch
-	$(SAIL) $(SAIL_FLAGS) -pytorch  $(SAIL_RGENIR_SRCS) -o $(basename $@)
+	$(SAIL) $(SAIL_FLAGS) -pytorch -ext mm $(SAIL_RGENIR_SRCS) -o $(basename $@)
 
 generated_definitions/llvm/llvm.td: $(SAIL_MM_SRCS) Makefile
 	mkdir -p generated_definitions/llvm
